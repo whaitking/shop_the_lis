@@ -2,21 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Item;
+use App\Models\ItemImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ItemImage>
- */
 class ItemImageFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = ItemImage::class;
+
     public function definition(): array
     {
         return [
+            // Si creas una imagen suelta, creará un Item automáticamente
+            'item_id' => Item::factory(),
+            // Ruta relativa al disco 'public'
             'image_path' => 'items/placeholder.png',
         ];
     }

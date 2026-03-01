@@ -2,34 +2,30 @@
 
 namespace Database\Factories;
 
+use App\Models\Item;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ItemFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected $model = Item::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-        $name = $this->faker->words(3, true) . ' ' . rand(1, 1000); // Nombre aleatorio + número
+        $name = $this->faker->words(3, true) . ' ' . rand(1, 1000);
+
         return [
             'name' => $name,
-            'slug' => Str::slug($name), // Esto generará slugs únicos como 'bicicleta-de-montaña-452'
+            'slug' => Str::slug($name) . '-' . uniqid(), // Uniqid asegura que nunca choque el slug
             'description' => $this->faker->paragraph(),
-            'price' => $this->faker->numberBetween(10, 500),
+            'price' => $this->faker->randomFloat(2, 5, 1000), // Precios más realistas (ej: 15.50)
             'condition' => $this->faker->randomElement(['new', 'used']),
             'status' => 'available',
-            'user_id' => \App\Models\User::inRandomOrder()->first()->id ?? \App\Models\User::factory(),
-            'category_id' => \App\Models\Category::inRandomOrder()->first()->id ?? \App\Models\Category::factory(),
+            // Buscamos uno existente o creamos uno nuevo si la DB está vacía
+            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory(),
         ];
     }
 }
