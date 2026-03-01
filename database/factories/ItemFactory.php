@@ -28,7 +28,6 @@ class ItemFactory extends Factory
             'price' => $this->faker->numberBetween(10, 500),
             'condition' => $this->faker->randomElement(['new', 'used']),
             'status' => 'available',
-            'image' => 'items/placeholder.png',
             'user_id' => \App\Models\User::inRandomOrder()->first()->id ?? \App\Models\User::factory(),
             'category_id' => \App\Models\Category::inRandomOrder()->first()->id ?? \App\Models\Category::factory(),
         ];

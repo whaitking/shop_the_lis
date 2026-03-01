@@ -12,9 +12,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('items', ItemController::class);
 });
 
-// La página principal la puede ver cualquiera
-// Ahora la página principal la gestiona el controlador
+// Rutas públicas (cualquiera puede entrar)
 Route::get('/', [ItemController::class, 'index'])->name('welcome');
+Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
+// Ruta para borrar una imagen individual
+Route::delete('/items/images/{image}', [App\Http\Controllers\ItemController::class, 'destroyImage'])->name('items.images.destroy');
 
 Route::get('/dashboard', function () {
     // Obtenemos solo los ítems que pertenecen al usuario logueado

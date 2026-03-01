@@ -53,8 +53,8 @@
                     {{-- Esto se ejecuta SI HAY productos --}}
                     <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                         <div class="h-48 overflow-hidden bg-gray-100">
-                            @if($item->image)
-                            <img src="{{ asset('storage/' . $item->image) }}" class="w-full h-full object-cover" alt="{{ $item->name }}">
+                            @if($item->images->isNotEmpty())
+                            <img src="{{ asset('storage/' . $item->images->first()->image_path) }}" class="w-full h-full object-cover">
                             @else
                             <img src="https://via.placeholder.com/300x200?text=Sin+Foto" class="w-full h-full object-cover">
                             @endif
@@ -72,6 +72,9 @@
                                 <a href="{{ route('items.show', $item) }}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">
                                     Ver más
                                 </a>
+                                @can('update', $item)
+                                <a href="{{ route('items.edit', $item) }}">Editar</a>
+                                @endcan
                             </div>
                         </div>
                     </div>

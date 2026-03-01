@@ -15,6 +15,8 @@ class ItemSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Item::factory(50)->create();
+        \App\Models\Item::factory(50)
+            ->hasImages(rand(3, 8))
+            ->create();
     }
 }

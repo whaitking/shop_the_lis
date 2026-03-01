@@ -32,8 +32,20 @@
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-gray-700">Foto del producto</label>
-                        <input type="file" name="image" class="w-full" accept="image/*" required>
+                        <label class="block text-gray-700 font-bold mb-2">Fotos del producto</label>
+                        <label for="images" class="cursor-pointer flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 hover:border-blue-400 transition-all group">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-8 h-8 mb-3 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                <p class="text-xs text-gray-500 font-semibold group-hover:text-blue-500 text-center px-1">Añadir fotos</p>
+                            </div>
+                            <input type="file" name="images[]" id="images" multiple accept="image/*" class="hidden">
+                        </label>
+
+                        <p class="text-xs text-gray-500 mt-1">Puedes subir hasta 10 fotos. Elige fotos claras y luminosas.</p>
+
+                        <div id="image-preview" class="grid grid-cols-3 sm:grid-cols-5 gap-4 mt-4"></div>
                     </div>
 
                     <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded-md hover:bg-green-700">
