@@ -68,7 +68,7 @@
                             <p class="text-sm text-gray-500 mt-1">{{ $item->category->name }}</p>
 
                             <div class="mt-4 flex items-center justify-between">
-                                <span class="text-xs text-gray-400">Vendido por: {{ $item->user->name }}</span>
+                                <a href="{{ route('profile.public', $item->user) }}" class="hover:underline font-bold">Vendido por: {{ $item->user->name }}</a>
                                 <a href="{{ route('items.show', $item) }}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">
                                     Ver más
                                 </a>

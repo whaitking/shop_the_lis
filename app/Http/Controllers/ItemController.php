@@ -7,11 +7,13 @@ use App\Models\ItemImage;
 use App\Models\Category;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Notifications\NewProductFromFollowedUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ItemController extends Controller
 {
@@ -54,38 +56,44 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validar los datos
-        $request->validate([
+        // 1. Validar y GUARDAR el resultado en una variable
+        $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
-            'images' => 'required|array|min:1|max:10', // Máximo 10 archivos
+            'images' => 'required|array|min:1|max:10',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // 2. Crear el registro
+        // 2. Crear el registro (Solo UNA vez)
         $item = Item::create([
             'user_id' => Auth::id(),
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'slug' => \Illuminate\Support\Str::slug($request->name) . '-' . uniqid(),
-            'description' => $request->description,
-            'price' => $request->price,
+            'category_id' => $validatedData['category_id'],
+            'name' => $validatedData['name'],
+            'slug' => Str::slug($validatedData['name']) . '-' . uniqid(),
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
         ]);
 
-        // 3. Guardar las imágenes una por una
+        // 3. Guardar las imágenes
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                // Guardamos el archivo en 'storage/app/public/items'
                 $path = $file->store('items', 'public');
-
-                // Creamos la relación en la tabla item_images
                 $item->images()->create([
                     'image_path' => $path,
                 ]);
             }
         }
+
+        // 4. Notificar a los seguidores (El item ya está creado con sus imágenes)
+        // Cargamos la relación del usuario y sus seguidores para evitar errores
+        $vendedor = Auth::user();
+
+        foreach ($vendedor->followers as $follower) {
+            $follower->notify(new NewProductFromFollowedUser($item));
+        }
+
         return redirect()->route('dashboard')->with('success', '¡Producto publicado con éxito!');
     }
 

@@ -18,6 +18,25 @@
                 </div>
             </div>
 
+            <!-- CHAT -->
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
+                <a href="{{ route('messages.index') }}" class="relative inline-flex items-center text-gray-500 hover:text-gray-700 transition duration-150 ease-in-out" title="Mis Mensajes">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                    </svg>
+
+                    {{-- Punto de notificación (solo visual por ahora) --}}
+                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                    </span>
+
+                    <span class="ml-2 text-sm font-medium {{ request()->routeIs('messages.*') ? 'text-blue-600' : '' }}">
+                        Chat
+                    </span>
+                </a>
+            </div>
+
             <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                 {{ __('Explorar Tienda') }}
             </x-nav-link>
@@ -25,6 +44,37 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 @auth
+
+                <!--  Notificaciones Dropdown -->
+                <div class="relative ml-3" x-data="{ open: false }">
+                    <button @click="open = !open" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-50 border border-gray-200" style="display: none;">
+                        <div class="py-2">
+                            <div class="px-4 py-2 text-xs text-gray-400 uppercase border-b">Notificaciones Recientes</div>
+                            @forelse(auth()->user()->notifications->take(5) as $notification)
+                            <a href="{{ route('items.show', $notification->data['item_id']) }}" class="flex items-center px-4 py-3 hover:bg-gray-100 border-b">
+                                <p class="text-gray-600 text-sm">
+                                    <span class="font-bold text-blue-600">{{ $notification->data['user_name'] }}</span>
+                                    {{ $notification->data['message'] }}
+                                </p>
+                            </a>
+                            @empty
+                            <div class="px-4 py-4 text-sm text-gray-500 text-center">No tienes notificaciones.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -38,9 +88,11 @@
                         </button>
                     </x-slot>
 
+
+
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('informacion perfil') }}
                         </x-dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -48,7 +100,7 @@
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
                                                     this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -83,6 +135,35 @@
 
         <!-- Responsive Settings Options -->
         @auth
+        <!--  Notificaciones Dropdown -->
+        <div class="relative ml-3" x-data="{ open: false }">
+            <button @click="open = !open" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                </svg>
+                @if(auth()->user()->unreadNotifications->count() > 0)
+                <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                    {{ auth()->user()->unreadNotifications->count() }}
+                </span>
+                @endif
+            </button>
+
+            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-50 border border-gray-200" style="display: none;">
+                <div class="py-2">
+                    <div class="px-4 py-2 text-xs text-gray-400 uppercase border-b">Notificaciones Recientes</div>
+                    @forelse(auth()->user()->notifications->take(5) as $notification)
+                    <a href="{{ route('items.show', $notification->data['item_id']) }}" class="flex items-center px-4 py-3 hover:bg-gray-100 border-b">
+                        <p class="text-gray-600 text-sm">
+                            <span class="font-bold text-blue-600">{{ $notification->data['user_name'] }}</span>
+                            {{ $notification->data['message'] }}
+                        </p>
+                    </a>
+                    @empty
+                    <div class="px-4 py-4 text-sm text-gray-500 text-center">No tienes notificaciones.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -92,7 +173,7 @@
             <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="mt-3 space-y-1">
                     <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
+                        {{ __('Información perfil') }}
                     </x-responsive-nav-link>
 
                     <!-- Authentication -->
@@ -102,7 +183,7 @@
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            {{ __('Cerrar sesión') }}
                         </x-responsive-nav-link>
                     </form>
                 </div>

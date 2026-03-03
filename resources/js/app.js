@@ -40,3 +40,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// Función para el scroll automático del chat
+document.addEventListener("DOMContentLoaded", () => {
+    const chatContainer = document.querySelector(".overflow-y-auto");
+
+    // Solo ejecutamos si estamos en la vista de chat (si existe el contenedor)
+    if (chatContainer && window.location.pathname.includes("/messages/")) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Opcional: Si quieres que haga scroll cada vez que el contenido cambie
+        // (por ejemplo, si añades mensajes dinámicamente)
+        const observer = new MutationObserver(() => {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+
+        observer.observe(chatContainer, { childList: true });
+    }
+});

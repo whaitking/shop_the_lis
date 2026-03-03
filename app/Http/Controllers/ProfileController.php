@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,5 +58,17 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function showPublic(User $user)
+    {
+        // Obtenemos los productos del usuario (asumiendo que la relación en User es 'items')
+        $userItems = $user->items()->latest()->get();
+
+        // Cargamos seguidores y seguidos
+        $followersCount = $user->followers()->count();
+        $followingCount = $user->followings()->count();
+
+        return view('profile.public', compact('user', 'userItems', 'followersCount', 'followingCount'));
     }
 }

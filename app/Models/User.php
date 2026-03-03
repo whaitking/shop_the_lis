@@ -52,4 +52,33 @@ class User extends Authenticatable
     {
         return $this->hasMany(Item::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    // Usuarios a los que yo sigo
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id');
+    }
+
+    // Usuarios que me siguen a mí
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
+    }
+
+    // promedio las estrellas de las reviews que ha recibido este usuario
+    public function averageRating()
+    {
+        return $this->reviewsReceived()->avg('stars') ?? 0;
+    }
+
+    // Relación de reseñas recibidas
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'reviewed_id');
+    }
 }

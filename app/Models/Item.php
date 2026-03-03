@@ -12,6 +12,11 @@ class Item extends Model
     // Campos que permitimos llenar de golpe
     protected $fillable = ['user_id', 'category_id', 'name', 'slug', 'description', 'price', 'image', 'condition', 'status'];
 
+    public function order()
+    {
+        return $this->hasOne(Order::class);
+    }
+
     public function show(Item $item)
     {
         /** @var \App\Models\Item $item */ // Esto le dice al editor: "Oye, esto es un Item"
@@ -30,6 +35,7 @@ class Item extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
     public function images()
     {
         return $this->hasMany(ItemImage::class);
