@@ -1,15 +1,33 @@
 import "./bootstrap";
-
 import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
-
 Alpine.start();
 
 // Esperamos a que el DOM esté cargado Foto Create Producto
 document.addEventListener("DOMContentLoaded", function () {
     const inputImages = document.querySelector("#images");
     const previewContainer = document.querySelector("#image-preview");
+    const navbar = document.querySelector("nav");
+
+    // 1. Efecto de Elevación del Navbar al hacer scroll
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 10) {
+            navbar.classList.add("shadow-lg", "bg-lis-blue", "text-white");
+            navbar.classList.remove("bg-white", "text-gray-800");
+        } else {
+            navbar.classList.remove("shadow-lg", "bg-lis-blue", "text-white");
+            navbar.classList.add("bg-white", "text-gray-800");
+        }
+    });
+
+    // 2. Animación de entrada para los productos (Staggered Fade-in)
+    const items = document.querySelectorAll(".product-card");
+    items.forEach((item, index) => {
+        setTimeout(() => {
+            item.classList.add("opacity-100", "translate-y-0");
+        }, index * 100);
+    });
 
     // Solo ejecutamos si los elementos existen en la página actual
     if (inputImages && previewContainer) {
