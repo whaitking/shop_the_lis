@@ -10,7 +10,7 @@ class Item extends Model
 {
     use HasFactory;
     // Campos que permitimos llenar de golpe
-    protected $fillable = ['user_id', 'category_id', 'name', 'slug', 'description', 'price', 'image', 'condition', 'status'];
+    protected $fillable = ['user_id', 'category_id', 'name', 'slug', 'description', 'price', 'condition', 'status'];
 
     public function order()
     {

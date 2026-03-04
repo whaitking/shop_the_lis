@@ -43,5 +43,8 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
+      - name: Build frontend
+        run: npm ci && npm run build
+
       - name: Execute tests
         run: php artisan test

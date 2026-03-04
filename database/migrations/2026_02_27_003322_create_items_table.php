@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description');
             $table->decimal('price', 10, 2); // Hasta 99.999.999,99
-            $table->string('image')->nullable(); // Guardaremos la ruta de la foto
 
             $table->string('condition')->default('used'); // nuevo, usado, etc.
             $table->string('status')->default('available'); // available, reserved, sold

@@ -63,7 +63,7 @@ class ProfileController extends Controller
     public function showPublic(User $user)
     {
         // Obtenemos los productos del usuario (asumiendo que la relación en User es 'items')
-        $userItems = $user->items()->latest()->get();
+        $userItems = $user->items()->with('images')->latest()->get();
 
         // Cargamos seguidores y seguidos
         $followersCount = $user->followers()->count();
