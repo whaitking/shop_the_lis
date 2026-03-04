@@ -37,8 +37,13 @@
                     </a>
                     <a href="{{ route('messages.index') }}"
                         :class="scrolled ? 'text-gray-200 hover:text-[#D4AF37]' : 'text-[#002395] hover:text-[#D4AF37]'"
-                        class="font-black uppercase tracking-wider transition-colors duration-300 {{ request()->routeIs('messages.*') ? 'border-b-2 border-[#D4AF37]' : '' }}">
+                        class="relative font-black uppercase tracking-wider transition-colors duration-300 {{ request()->routeIs('messages.*') ? 'border-b-2 border-[#D4AF37]' : '' }}">
                         {{ __('Mensajes') }}
+                        @if(auth()->user()->unreadMessagesCount() > 0)
+                        <span class="absolute -top-2 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white border border-white shadow-sm">
+                            {{ auth()->user()->unreadMessagesCount() }}
+                        </span>
+                        @endif
                     </a>
                     @endauth
                 </div>
@@ -177,8 +182,13 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="font-bold text-[#002395]">
                 {{ __('Mi Inventario') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" class="font-bold text-[#002395]">
-                {{ __('Mensajes') }}
+            <x-responsive-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" class="font-bold text-[#002395] flex items-center justify-between">
+                <span>{{ __('Mensajes') }}</span>
+                @if(auth()->user()->unreadMessagesCount() > 0)
+                <span class="flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
+                    {{ auth()->user()->unreadMessagesCount() }}
+                </span>
+                @endif
             </x-responsive-nav-link>
             @endauth
         </div>

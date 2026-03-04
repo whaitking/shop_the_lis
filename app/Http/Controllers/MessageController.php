@@ -42,6 +42,13 @@ class MessageController extends Controller
             return redirect()->route('dashboard')->with('error', 'No puedes chatear contigo mismo.');
         }
 
+        // Marcar como leídos los mensajes que el otro usuario nos envió en este chat
+        Message::where('item_id', $item->id)
+            ->where('sender_id', $receiver_id)
+            ->where('receiver_id', Auth::id())
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         // Buscamos los mensajes cifrados entre estos dos usuarios sobre este item
         $messages = Message::where('item_id', $item->id)
             ->where(function ($q) use ($receiver_id) {

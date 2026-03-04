@@ -13,10 +13,13 @@
                 @forelse($chats as $chat)
                 @php
                 $otherUser = ($chat->sender_id == auth()->id()) ? $chat->receiver : $chat->sender;
+
+                // Determinamos si el último mensaje es de la otra persona y no lo hemos leído
+                $hasUnread = $chat->receiver_id == auth()->id() && is_null($chat->read_at);
                 @endphp
 
                 {{-- Fila de Chat (Ahora es un div relative) --}}
-                <div class="relative group p-5 hover:bg-blue-50/50 transition-colors duration-300">
+                <div class="relative group p-5 transition-colors duration-300 {{ $hasUnread ? 'bg-blue-50/70 border-l-4 border-l-[#002395]' : 'hover:bg-blue-50/50' }}">
 
                     {{-- ENLACE PRINCIPAL INVISIBLE (Cubre toda la fila y lleva al chat) --}}
                     <a href="{{ route('messages.show', [$chat->item, $otherUser->id]) }}" class="absolute inset-0 z-0" aria-hidden="true"></a>
@@ -49,8 +52,13 @@
                             </div>
 
                             {{-- Producto y Último Mensaje --}}
-                            <p class="text-sm font-black text-[#D4AF37] truncate mb-0.5">{{ $chat->item->name }}</p>
-                            <p class="text-sm text-gray-500 truncate italic">"{{ $chat->content }}"</p>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <p class="text-sm font-black text-[#D4AF37] truncate">{{ $chat->item->name }}</p>
+                                @if($hasUnread)
+                                <span class="flex h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                                @endif
+                            </div>
+                            <p class="text-sm {{ $hasUnread ? 'text-gray-900 font-bold' : 'text-gray-500 italic' }} truncate">"{{ $chat->content }}"</p>
                         </div>
 
                         {{-- Flecha indicadora --}}
