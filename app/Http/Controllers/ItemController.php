@@ -28,7 +28,7 @@ class ItemController extends Controller
         // Usamos paginate para que si hay muchos, se creen páginas automáticamente
         $search = $request->input('search');
 
-        $items = Item::with(['user', 'category'])
+        $items = Item::with(['user', 'category', 'images'])
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -105,7 +105,7 @@ class ItemController extends Controller
         $item->load(['user', 'category']);
 
         // Buscamos productos de la misma categoría, excluyendo el actual
-        $relatedItems = Item::where('category_id', $item->category_id)
+        $relatedItems = Item::with('images')->where('category_id', $item->category_id)
             ->where('id', '!=', $item->id) // No queremos que se vea a sí mismo
             ->where('status', 'available') // Solo los que están a la venta
             ->latest()

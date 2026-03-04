@@ -26,7 +26,7 @@ Route::delete('/items/images/{image}', [App\Http\Controllers\ItemController::cla
 
 Route::get('/dashboard', function () {
     // Obtenemos solo los ítems que pertenecen al usuario logueado
-    $myItems = Auth::user()->items()->latest()->get();
+    $myItems = Auth::user()->items()->with('images')->latest()->get();
     // Pasamos la variable a la vista usando compact()
     return view('dashboard', compact('myItems'));
 })->middleware(['auth', 'verified'])->name('dashboard');

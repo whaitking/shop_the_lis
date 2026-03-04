@@ -1,0 +1,3 @@
+## 2024-03-04 - Eager loading items' images to fix N+1 problem
+**Learning:** In Laravel, displaying a list of items and grabbing their associated images one by one triggers the N+1 query problem, creating a new DB query per item. It can be found in places like `Item::latest()->get()` and then iterating to show `$item->images`.
+**Action:** When displaying item listings across multiple pages (e.g. homepage, dashboard, public profile, related items), always eager load `images` using `with('images')` (like `Item::with(['images', 'user', 'category'])`) to collapse N DB calls into a single, efficient query.
