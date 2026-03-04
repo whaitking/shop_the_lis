@@ -48,6 +48,12 @@ class User extends Authenticatable
         ];
     }
 
+
+    public function unreadMessagesCount()
+    {
+        return Message::where('receiver_id', $this->id)->whereNull('read_at')->count();
+    }
+
     public function items()
     {
         return $this->hasMany(Item::class);
