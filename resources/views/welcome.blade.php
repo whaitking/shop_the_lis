@@ -74,6 +74,22 @@
                 </div>
                 @endif
 
+                {{-- Filtro de Categorías --}}
+                <div class="mb-8 overflow-x-auto pb-4 scrollbar-hide">
+                    <div class="flex gap-3">
+                        <a href="{{ route('welcome', ['search' => request('search')]) }}"
+                           class="whitespace-nowrap px-4 py-2 rounded-full font-bold text-sm transition-colors {{ !request('category') ? 'bg-[#002395] text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:border-[#D4AF37] hover:text-[#002395]' }}">
+                            Todas
+                        </a>
+                        @foreach($categories as $cat)
+                            <a href="{{ route('welcome', ['category' => $cat->slug, 'search' => request('search')]) }}"
+                               class="whitespace-nowrap px-4 py-2 rounded-full font-bold text-sm transition-colors {{ request('category') === $cat->slug ? 'bg-[#002395] text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:border-[#D4AF37] hover:text-[#002395]' }}">
+                                {{ $cat->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     @forelse ($items as $item)
                     {{-- Tarjeta de Producto Premium --}}

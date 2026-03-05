@@ -19,7 +19,23 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(10)->create();
 
         // Creamos las categorías primero si no existen
-        $categories = ['Electrónica', 'Moda', 'Hogar', 'Motor'];
+        $categories = [
+            'Moda y Accesorios',
+            'Hogar y Jardín',
+            'Informática y Electrónica',
+            'Móviles y Telefonía',
+            'TV, Audio y Foto',
+            'Consolas y Videojuegos',
+            'Niños y Bebés',
+            'Deporte y Ocio',
+            'Cine, Libros y Música',
+            'Coleccionismo',
+            'Electrodomésticos',
+            'Construcción y Reformas',
+            'Motor',
+            'Inmobiliaria',
+            'Servicios'
+        ];
         foreach ($categories as $cat) {
             \App\Models\Category::create([
                 'name' => $cat,
