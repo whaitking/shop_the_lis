@@ -8,6 +8,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\CheckoutController;
 
 // Solo usuarios autenticados pueden gestionar productos
 Route::middleware(['auth'])->group(function () {
@@ -49,6 +50,10 @@ Route::middleware('auth')->group(function () {
         return response()->json(['success' => true]);
     })->name('notifications.markRead');
 
+    // Rutas para el proceso de pago con Stripe
+    Route::post('/checkout/{item}', [CheckoutController::class, 'checkout'])->name('checkout.process');
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 });
 
 require __DIR__ . '/auth.php';

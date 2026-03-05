@@ -132,17 +132,16 @@
                                     Editar Reliquia
                                 </a>
                                 @else
-                                {{-- Comprar (Dorado) --}}
-                                <form action="{{ route('orders.store', $item) }}" method="POST" class="w-full">
+                                {{-- NUEVO Botón Comprar (Apunta a Stripe) --}}
+                                <form action="{{ route('checkout.process', $item) }}" method="POST" class="w-full">
                                     @csrf
                                     <button type="submit"
                                         {{ $item->status !== 'available' ? 'disabled' : '' }}
-                                        onclick="return confirm('¿Confirmas la adquisición de {{ $item->name }} por {{ $item->price }}€?')"
                                         class="w-full {{ $item->status === 'available' ? 'bg-[#D4AF37] hover:bg-yellow-500 text-[#002395] shadow-lg hover:-translate-y-1' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }} px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                         </svg>
-                                        {{ $item->status === 'available' ? 'Adquirir' : 'Agotado' }}
+                                        {{ $item->status === 'available' ? 'Pagar de forma segura' : 'Agotado' }}
                                     </button>
                                 </form>
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained()->onDelete('cascade'); // El producto
             $table->decimal('amount', 10, 2); // Precio al que se compró
             $table->string('status')->default('completed'); // Por si luego quieres añadir 'pending'
+            $table->string('transaction_id')->nullable()->unique(); // Guardará el ID de Stripe
             $table->timestamps();
         });
     }
