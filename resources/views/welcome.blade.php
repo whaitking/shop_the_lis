@@ -93,8 +93,15 @@
                             @endif
 
                             {{-- Categoría (Badge superior) --}}
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#002395] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                                {{ $item->category->name }}
+                            <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                <div class="bg-white/90 backdrop-blur-sm text-[#002395] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                    {{ $item->category->name }}
+                                </div>
+                                @if($item->status === 'sold')
+                                <div class="bg-red-600/90 backdrop-blur-sm text-white text-xs font-black px-3 py-1 rounded-full shadow-sm uppercase tracking-widest self-start">
+                                    Vendido
+                                </div>
+                                @endif
                             </div>
                         </div>
 
