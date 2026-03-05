@@ -27,6 +27,7 @@ class ItemController extends Controller
         // Obtenemos todos los artículos, cargando también quién lo vende y su categoría
         // Usamos paginate para que si hay muchos, se creen páginas automáticamente
         $search = $request->input('search');
+        $categorySlug = $request->input('category');
 
         $items = Item::with(['user', 'category', 'images'])
             ->when($search, function ($query, $search) {
@@ -35,11 +36,18 @@ class ItemController extends Controller
                         ->orWhere('description', 'like', "%{$search}%");
                 });
             })
+            ->when($categorySlug, function ($query, $categorySlug) {
+                return $query->whereHas('category', function ($q) use ($categorySlug) {
+                    $q->where('slug', $categorySlug);
+                });
+            })
             ->latest()
             ->paginate(12)
             ->withQueryString(); // ¡IMPORTANTE! Esto mantiene la búsqueda al cambiar de página
+
+        $categories = Category::all();
         // Retornamos la vista 'welcome' pasándole los artículos
-        return view('welcome', compact('items'));
+        return view('welcome', compact('items', 'categories'));
     }
 
     /**
