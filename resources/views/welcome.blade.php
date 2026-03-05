@@ -34,7 +34,7 @@
                             Descubre <span class="text-[#D4AF37]">Tesoros</span>
                         </h2>
                         <p class="text-blue-100 text-lg max-w-xl">
-                            El mercado exclusivo de la Orden. Encuentra reliquias, arte y tecnología de otros miembros de confianza.
+                            El mercado exclusivo de SHOPTHELIS. Encuentra reliquias, arte y tecnología de otros miembros de confianza.
                         </p>
                     </div>
 

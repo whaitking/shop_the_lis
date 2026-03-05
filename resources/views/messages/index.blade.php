@@ -4,7 +4,7 @@
 
             {{-- Cabecera Elegante --}}
             <div class="flex items-center justify-between mb-8">
-                <h1 class="text-2xl font-black text-[#002395] uppercase tracking-wide">Mensajes de la Orden</h1>
+                <h1 class="text-2xl font-black text-[#002395] uppercase tracking-wide">Mensajes de SHOPTHELIS</h1>
                 <div class="h-1 flex-1 bg-gradient-to-r from-[#D4AF37] to-transparent ml-6 rounded-full opacity-30"></div>
             </div>
 
@@ -78,7 +78,7 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-bold text-[#002395] mb-2">Tu buzón está en silencio</h3>
-                    <p class="text-gray-500 mb-6">Aún no has iniciado ninguna correspondencia con otros miembros de la Orden.</p>
+                    <p class="text-gray-500 mb-6">Aún no has iniciado ninguna correspondencia con otros miembros de SHOPTHELIS.</p>
                     <a href="{{ route('welcome') }}" class="inline-block bg-[#002395] hover:bg-[#D4AF37] text-white font-bold py-3 px-8 rounded-full transition-colors shadow-md">
                         Explorar Tesoros
                     </a>

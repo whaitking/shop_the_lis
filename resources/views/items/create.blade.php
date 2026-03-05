@@ -17,7 +17,7 @@
             {{-- Contenedor del Formulario --}}
             <div class="bg-white p-8 sm:p-10 shadow-xl rounded-2xl border-t-4 border-[#D4AF37]">
 
-                <p class="text-gray-500 mb-8 font-medium">Ofrece tu artículo a los miembros de La Orden. Sé detallista en tu descripción para asegurar una transacción exitosa.</p>
+                <p class="text-gray-500 mb-8 font-medium">Ofrece tu artículo a los miembros de SHOPTHELIS. Sé detallista en tu descripción para asegurar una transacción exitosa.</p>
 
                 <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf

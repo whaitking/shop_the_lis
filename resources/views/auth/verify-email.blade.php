@@ -9,7 +9,7 @@
         </div>
         <h2 class="text-2xl font-black text-[#002395] uppercase tracking-widest">Verifica tu Correo</h2>
         <p class="text-sm text-gray-500 mt-2 font-medium px-2">
-            ¡Gracias por unirte a La Orden! Para garantizar la seguridad de tus transacciones, por favor verifica tu dirección de correo haciendo clic en el enlace que te acabamos de enviar.
+            ¡Gracias por unirte a SHOPTHELIS! Para garantizar la seguridad de tus transacciones, por favor verifica tu dirección de correo haciendo clic en el enlace que te acabamos de enviar.
         </p>
     </div>
 
