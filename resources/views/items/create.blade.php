@@ -60,6 +60,23 @@
                             </div>
                         </div>
 
+                        {{-- Condición --}}
+                        <div>
+                            <label class="block text-sm font-bold text-[#002395] uppercase tracking-wider mb-2">Condición del Producto</label>
+                            <div class="relative">
+                                <select name="condition" class="w-full border-gray-200 bg-gray-50 focus:bg-white rounded-lg shadow-inner focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent transition-all duration-300 appearance-none cursor-pointer" required>
+                                    <option value="" disabled selected>Selecciona el estado...</option>
+                                    <option value="Nuevo">Nuevo</option>
+                                    <option value="Como nuevo">Como nuevo</option>
+                                    <option value="Usado - Buen estado">Usado - Buen estado</option>
+                                    <option value="Usado - Aceptable">Usado - Aceptable</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#002395]">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     {{-- 2. Descripción --}}
