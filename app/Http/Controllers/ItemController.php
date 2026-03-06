@@ -70,6 +70,7 @@ class ItemController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
+            'condition' => 'required|string',
             'images' => 'required|array|min:1|max:10',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
@@ -82,15 +83,21 @@ class ItemController extends Controller
             'slug' => Str::slug($validatedData['name']) . '-' . uniqid(),
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
+            'condition' => $validatedData['condition'],
         ]);
 
-        // 3. Guardar las imágenes
+        // 3. Guardar las imágenes (evitando archivos duplicados)
         if ($request->hasFile('images')) {
+            $uploadedHashes = [];
             foreach ($request->file('images') as $file) {
-                $path = $file->store('items', 'public');
-                $item->images()->create([
-                    'image_path' => $path,
-                ]);
+                $hash = md5_file($file->getRealPath());
+                if (!in_array($hash, $uploadedHashes)) {
+                    $uploadedHashes[] = $hash;
+                    $path = $file->store('items', 'public');
+                    $item->images()->create([
+                        'image_path' => $path,
+                    ]);
+                }
             }
         }
 
@@ -152,20 +159,26 @@ class ItemController extends Controller
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'condition' => 'required|string',
             'images' => 'nullable|array|max:10',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         // 3. Actualizar los datos de texto
-        $item->update($request->only('name', 'price', 'description', 'category_id'));
+        $item->update($request->only('name', 'price', 'description', 'category_id', 'condition'));
 
-        // 4. Guardar NUEVAS imágenes si el usuario ha subido más
+        // 4. Guardar NUEVAS imágenes si el usuario ha subido más (evitando duplicados)
         if ($request->hasFile('images')) {
+            $uploadedHashes = [];
             foreach ($request->file('images') as $file) {
-                $path = $file->store('items', 'public');
-                $item->images()->create([
-                    'image_path' => $path,
-                ]);
+                $hash = md5_file($file->getRealPath());
+                if (!in_array($hash, $uploadedHashes)) {
+                    $uploadedHashes[] = $hash;
+                    $path = $file->store('items', 'public');
+                    $item->images()->create([
+                        'image_path' => $path,
+                    ]);
+                }
             }
         }
 
