@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Message;
 use App\Models\Item;
+use App\Models\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
 
 class MessageController extends Controller
 {
@@ -24,7 +22,8 @@ class MessageController extends Controller
                 // Agrupamos por Item y por el par de usuarios
                 $participants = [$message->sender_id, $message->receiver_id];
                 sort($participants);
-                return $message->item_id . '-' . implode('-', $participants);
+
+                return $message->item_id.'-'.implode('-', $participants);
             });
 
         return view('messages.index', compact('chats'));
@@ -65,7 +64,7 @@ class MessageController extends Controller
             'item' => $item,
             'messages' => $messages,
             'receiver_id' => $receiver_id,
-            'otherUser' => \App\Models\User::findOrFail($receiver_id)
+            'otherUser' => \App\Models\User::findOrFail($receiver_id),
         ]);
     }
 

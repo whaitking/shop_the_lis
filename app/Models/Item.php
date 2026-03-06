@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
     use HasFactory;
+
     // Campos que permitimos llenar de golpe
     protected $fillable = ['user_id', 'category_id', 'name', 'slug', 'description', 'price', 'condition', 'status'];
 
@@ -21,6 +21,7 @@ class Item extends Model
     {
         /** @var \App\Models\Item $item */ // Esto le dice al editor: "Oye, esto es un Item"
         $vendedor = $item->user->name;
+
         return view('items.show', compact('item'));
     }
 

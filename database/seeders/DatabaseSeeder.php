@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -34,12 +33,12 @@ class DatabaseSeeder extends Seeder
             'Construcción y Reformas',
             'Motor',
             'Inmobiliaria',
-            'Servicios'
+            'Servicios',
         ];
         foreach ($categories as $cat) {
             \App\Models\Category::create([
                 'name' => $cat,
-                'slug' => \Illuminate\Support\Str::slug($cat)
+                'slug' => \Illuminate\Support\Str::slug($cat),
             ]);
         }
 

@@ -1,13 +1,12 @@
 <?php
 
-use App\Models\Item;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 // Solo usuarios autenticados pueden gestionar productos
 Route::middleware(['auth'])->group(function () {
@@ -27,6 +26,7 @@ Route::delete('/items/images/{image}', [App\Http\Controllers\ItemController::cla
 Route::get('/dashboard', function () {
     // Obtenemos solo los ítems que pertenecen al usuario logueado
     $myItems = Auth::user()->items()->with('images')->latest()->get();
+
     // Pasamos la variable a la vista usando compact()
     return view('dashboard', compact('myItems'));
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -46,9 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/{user}/follow', [FollowController::class, 'toggle'])->name('user.follow');
     Route::post('/notifications/mark-read', function () {
         auth()->user()->unreadNotifications->markAsRead();
+
         return response()->json(['success' => true]);
     })->name('notifications.markRead');
 
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
