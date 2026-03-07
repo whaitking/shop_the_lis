@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Item;
 use App\Models\ItemImage;
-use App\Models\Category;
-use App\Models\User;
-use App\Http\Controllers\Controller;
 use App\Notifications\NewProductFromFollowedUser;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,10 +17,10 @@ use Illuminate\Support\Str;
 class ItemController extends Controller
 {
     use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
-
     public function index(Request $request)
     {
         // Obtenemos todos los artículos, cargando también quién lo vende y su categoría
@@ -45,7 +44,12 @@ class ItemController extends Controller
             ->paginate(12)
             ->withQueryString(); // ¡IMPORTANTE! Esto mantiene la búsqueda al cambiar de página
 
-        $categories = Category::all();
+        // ⚡ Bolt Optimization: Cache categories since they are rarely updated
+        // Saves a database query on the most visited page (homepage)
+        $categories = Cache::rememberForever('categories_all', function () {
+            return Category::all();
+        });
+
         // Retornamos la vista 'welcome' pasándole los artículos
         return view('welcome', compact('items', 'categories'));
     }
@@ -55,7 +59,11 @@ class ItemController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        // ⚡ Bolt Optimization: Use cached categories
+        $categories = Cache::rememberForever('categories_all', function () {
+            return Category::all();
+        });
+
         return view('items.create', compact('categories'));
     }
 
@@ -80,7 +88,7 @@ class ItemController extends Controller
             'user_id' => Auth::id(),
             'category_id' => $validatedData['category_id'],
             'name' => $validatedData['name'],
-            'slug' => Str::slug($validatedData['name']) . '-' . uniqid(),
+            'slug' => Str::slug($validatedData['name']).'-'.uniqid(),
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
             'condition' => $validatedData['condition'],
@@ -91,7 +99,7 @@ class ItemController extends Controller
             $uploadedHashes = [];
             foreach ($request->file('images') as $file) {
                 $hash = md5_file($file->getRealPath());
-                if (!in_array($hash, $uploadedHashes)) {
+                if (! in_array($hash, $uploadedHashes)) {
                     $uploadedHashes[] = $hash;
                     $path = $file->store('items', 'public');
                     $item->images()->create([
@@ -139,7 +147,10 @@ class ItemController extends Controller
         Gate::authorize('update', $item);
 
         // 2. Cargar las categorías para el desplegable
-        $categories = \App\Models\Category::all();
+        // ⚡ Bolt Optimization: Use cached categories
+        $categories = Cache::rememberForever('categories_all', function () {
+            return Category::all();
+        });
 
         // 3. Devolver la vista pasándole el artículo y las categorías
         return view('items.edit', compact('item', 'categories'));
@@ -172,7 +183,7 @@ class ItemController extends Controller
             $uploadedHashes = [];
             foreach ($request->file('images') as $file) {
                 $hash = md5_file($file->getRealPath());
-                if (!in_array($hash, $uploadedHashes)) {
+                if (! in_array($hash, $uploadedHashes)) {
                     $uploadedHashes[] = $hash;
                     $path = $file->store('items', 'public');
                     $item->images()->create([
@@ -189,6 +200,7 @@ class ItemController extends Controller
     {
         Gate::authorize('delete', $item);
         $item->delete();
+
         return redirect()->route('dashboard');
     }
 
@@ -197,7 +209,7 @@ class ItemController extends Controller
         // 1. SEGURIDAD: Comprobamos que el usuario es el dueño del artículo al que pertenece la foto
         Gate::authorize('update', $image->item);
 
-        //Limpiamos la ruta por si acaso tiene el prefijo '/storage/' o 'storage/'
+        // Limpiamos la ruta por si acaso tiene el prefijo '/storage/' o 'storage/'
         // Storage::disk('public')->delete() espera algo como 'items/nombre.jpg'
         $path = str_replace(['/storage/', 'storage/'], '', $image->image_path);
         // 2. Borrar el archivo físico del disco duro (Storage)

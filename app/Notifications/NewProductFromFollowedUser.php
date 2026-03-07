@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Models\Item;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -35,7 +34,7 @@ class NewProductFromFollowedUser extends Notification
             'item_id' => $this->item->id,
             'item_name' => $this->item->name,
             'user_name' => $this->item->user->name,
-            'message' => 'ha publicado un nuevo producto: ' . $this->item->name
+            'message' => 'ha publicado un nuevo producto: '.$this->item->name,
         ];
     }
 
